@@ -21,6 +21,7 @@ public protocol APIProvider {
     func fetchMain(completion: @escaping MainCompletion)
     func fetchGame(with id: String,
                    completion: @escaping GameCompletion)
+
 }
 
 public extension APIProvider {

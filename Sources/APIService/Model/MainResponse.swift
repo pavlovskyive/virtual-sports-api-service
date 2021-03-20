@@ -55,6 +55,7 @@ public struct Tag: Codable {
         case id
         case name = "displayName"
     }
+
 }
 
 
@@ -86,4 +87,5 @@ public struct GameConfig: Codable {
         case image = "backgroundImage"
         case game
     }
+
 }

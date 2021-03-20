@@ -14,4 +14,15 @@ public struct APIConfig {
     var mainPath: String
     var gamePath: String
     
+    public init(scheme: String,
+                host: String,
+                mainPath: String,
+                gamePath: String) {
+        
+        self.scheme = scheme
+        self.host = host
+        self.mainPath = mainPath
+        self.gamePath = gamePath
+    }
+    
 }
