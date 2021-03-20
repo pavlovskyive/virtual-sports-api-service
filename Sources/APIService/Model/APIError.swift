@@ -9,7 +9,9 @@ import Foundation
 import NetworkService
 
 public enum APIError: Error {
+
     case networkError(NetworkError)
     case couldNotParseURL
     case unknownError(Error)
+
 }
