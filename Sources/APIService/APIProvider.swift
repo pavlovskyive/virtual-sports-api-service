@@ -100,7 +100,6 @@ extension APIProvider {
         components.path = path
         
         return components
-        
     }
     
 }

@@ -16,6 +16,17 @@ public struct MainResponse: Codable {
     let categories: [Category]
     let tags: [Tag]
     let games: [Game]
+    
+    public init(providers: [Provider],
+                  categories: [Category],
+                  tags: [Tag],
+                  games: [Game]) {
+
+        self.providers = providers
+        self.categories = categories
+        self.tags = tags
+        self.games = games
+    }
 
 }
 
@@ -29,7 +40,13 @@ public struct Provider: Codable {
         case id
         case name = "displayName"
     }
-    
+
+    public init(id: String, name: String) {
+
+        self.id = id
+        self.name = name
+    }
+
 }
 
 // MARK: - Category
@@ -43,6 +60,12 @@ public struct Category: Codable {
         case name = "displayName"
     }
 
+    public init(id: String, name: String) {
+
+        self.id = id
+        self.name = name
+    }
+    
 }
 
 // MARK: - Tag
@@ -54,6 +77,12 @@ public struct Tag: Codable {
     enum CodingKeys: String, CodingKey {
         case id
         case name = "displayName"
+    }
+
+    public init(id: String, name: String) {
+
+        self.id = id
+        self.name = name
     }
 
 }
@@ -73,6 +102,19 @@ public struct Game: Codable {
         case tags
     }
 
+    public init(id: String,
+                provider: String,
+                category: [String],
+                name: String,
+                tags: [String]) {
+
+        self.id = id
+        self.provider = provider
+        self.category = category
+        self.name = name
+        self.tags = tags
+    }
+    
 }
 
 // MARK: - GameConfig
@@ -86,6 +128,13 @@ public struct GameConfig: Codable {
         case url
         case image = "backgroundImage"
         case game
+    }
+    
+    public init(url: String, image: String, game: Game) {
+
+        self.url = url
+        self.image = image
+        self.game = game
     }
 
 }
