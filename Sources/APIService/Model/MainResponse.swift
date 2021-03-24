@@ -12,10 +12,10 @@ import Foundation
 // MARK: - MainResponse
 public struct MainResponse: Codable {
 
-    let providers: [Provider]
-    let categories: [Category]
-    let tags: [Tag]
-    let games: [Game]
+    public let providers: [Provider]
+    public let categories: [Category]
+    public let tags: [Tag]
+    public let games: [Game]
     
     public init(providers: [Provider],
                   categories: [Category],
@@ -33,9 +33,9 @@ public struct MainResponse: Codable {
 // MARK: - Provider
 public struct Provider: Codable {
 
-    let id: String
-    let name: String
-    let imageURL: String
+    public let id: String
+    public let name: String
+    public let imageURL: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -55,9 +55,9 @@ public struct Provider: Codable {
 // MARK: - Category
 public struct Category: Codable {
 
-    let id: String
-    let name: String
-    let imageURL: String
+    public let id: String
+    public let name: String
+    public let imageURL: String
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -77,8 +77,8 @@ public struct Category: Codable {
 // MARK: - Tag
 public struct Tag: Codable {
 
-    let id: String
-    let name: String
+    public let id: String
+    public let name: String
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -97,10 +97,10 @@ public struct Tag: Codable {
 // MARK: - Game
 public struct Game: Codable {
 
-    let id, provider: String
-    let categories: [String]
-    let name: String
-    let tags: [String]
+    public let id, provider: String
+    public let categories: [String]
+    public let name: String
+    public let tags: [String]
     
     enum CodingKeys: String, CodingKey {
         case id, provider, categories
