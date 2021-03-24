@@ -9,13 +9,25 @@ import NetworkService
 import Foundation
 
 final public class APIService: APIFetcher {
+    
+    public var token: String? = nil {
+        didSet {
+            guard let token = token else {
+                networkService.defaultHeaders.removeValue(forKey: "token")
+                return
+            }
+
+            networkService.defaultHeaders["token"] = token
+        }
+    }
 
     var networkService: NetworkProvider
     var config: APIConfig
-    var token: String? = nil
 
-    public init(config: APIConfig) {
-        self.networkService = NetworkService(defaultHeaders: ["X-Platform": "Mobile"])
+    public init(networkService: NetworkService = NetworkService(),
+                config: APIConfig) {
+        self.networkService = networkService
+        self.networkService.defaultHeaders = ["X-Platform": "Mobile"]
         self.config = config
     }
 
