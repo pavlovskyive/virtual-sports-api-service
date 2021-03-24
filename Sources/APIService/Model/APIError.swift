@@ -11,7 +11,7 @@ import NetworkService
 public enum APIError: Error {
 
     case networkError(NetworkError)
-    case couldNotParseURL
+    case internalError
     case unknownError(Error)
 
 }
