@@ -35,16 +35,19 @@ public struct Provider: Codable {
 
     let id: String
     let name: String
+    let imageURL: String
 
     enum CodingKeys: String, CodingKey {
         case id
         case name = "displayName"
+        case imageURL = "image"
     }
 
-    public init(id: String, name: String) {
+    public init(id: String, name: String, imageURL: String) {
 
         self.id = id
         self.name = name
+        self.imageURL = imageURL
     }
 
 }
@@ -54,16 +57,19 @@ public struct Category: Codable {
 
     let id: String
     let name: String
+    let imageURL: String
     
     enum CodingKeys: String, CodingKey {
         case id
         case name = "displayName"
+        case imageURL = "image"
     }
 
-    public init(id: String, name: String) {
+    public init(id: String, name: String, imageURL: String) {
 
         self.id = id
         self.name = name
+        self.imageURL = imageURL
     }
     
 }
@@ -92,49 +98,27 @@ public struct Tag: Codable {
 public struct Game: Codable {
 
     let id, provider: String
-    let category: [String]
+    let categories: [String]
     let name: String
     let tags: [String]
     
     enum CodingKeys: String, CodingKey {
-        case id, provider, category
+        case id, provider, categories
         case name = "displayName"
         case tags
     }
 
     public init(id: String,
                 provider: String,
-                category: [String],
+                categories: [String],
                 name: String,
                 tags: [String]) {
 
         self.id = id
         self.provider = provider
-        self.category = category
+        self.categories = categories
         self.name = name
         self.tags = tags
     }
     
-}
-
-// MARK: - GameConfig
-public struct GameConfig: Codable {
-
-    let url: String
-    let image: String
-    let game: Game
-    
-    enum CodingKeys: String, CodingKey {
-        case url
-        case image = "backgroundImage"
-        case game
-    }
-    
-    public init(url: String, image: String, game: Game) {
-
-        self.url = url
-        self.image = image
-        self.game = game
-    }
-
 }
