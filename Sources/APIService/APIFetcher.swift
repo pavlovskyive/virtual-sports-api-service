@@ -10,6 +10,8 @@ import NetworkService
 
 public protocol APIFetcher {
     
+    var token: String? { get set }
+
     typealias Completion<T> = (Result<T, APIError>) -> ()
     
     typealias MainCompletion = Completion<MainResponse>
