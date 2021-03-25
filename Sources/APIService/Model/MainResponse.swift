@@ -13,12 +13,12 @@ import Foundation
 public struct MainResponse: Codable {
 
     public let providers: [Provider]
-    public let categories: [Category]
+    public let categories: [GameCategory]
     public let tags: [Tag]
     public let games: [Game]
     
     public init(providers: [Provider],
-                  categories: [Category],
+                  categories: [GameCategory],
                   tags: [Tag],
                   games: [Game]) {
 
@@ -53,7 +53,7 @@ public struct Provider: Codable {
 }
 
 // MARK: - Category
-public struct Category: Codable {
+public struct GameCategory: Codable {
 
     public let id: String
     public let name: String
