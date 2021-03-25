@@ -1,5 +1,5 @@
 //
-//  APIProvider.swift
+//  APIFetchable.swift
 //  
 //
 //  Created by Vsevolod Pavlovskyi on 20.03.2021.
@@ -8,9 +8,7 @@
 import Foundation
 import NetworkService
 
-public protocol APIFetcher {
-    
-    var token: String? { get set }
+public protocol APIFetchable {
 
     typealias Completion<T> = (Result<T, APIError>) -> ()
     

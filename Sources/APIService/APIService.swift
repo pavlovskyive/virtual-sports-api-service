@@ -8,27 +8,18 @@
 import NetworkService
 import Foundation
 
-final public class APIService: APIFetcher {
-    
-    public var token: String? = nil {
-        didSet {
-            guard let token = token else {
-                networkService.defaultHeaders.removeValue(forKey: "token")
-                return
-            }
+final public class APIService: APIFetchable {
 
-            networkService.defaultHeaders["token"] = token
-        }
-    }
-
-    var networkService: NetworkProvider
+    var networkProvider: NetworkProvider
     var config: APIConfig
 
-    public init(networkService: NetworkService = NetworkService(),
+    public init(networkProvider: NetworkProvider,
                 config: APIConfig) {
-        self.networkService = networkService
-        self.networkService.defaultHeaders = ["X-Platform": "Mobile"]
+        self.networkProvider = networkProvider
         self.config = config
+        
+        networkProvider.setHeader("Mobile", forKey: "X-Platform")
+        networkProvider.setHeader("accept", forKey: "application/json")
     }
 
     public func fetchMain(completion: @escaping MainCompletion) {
@@ -47,7 +38,7 @@ extension APIService {
     func fetch<T: Decodable>(from resource: Resource,
                              completion: @escaping Completion<T>) {
 
-        networkService.performRequest(for: resource, decodingTo: T.self) { result in
+        networkProvider.performRequest(for: resource, decodingTo: T.self) { result in
             switch result {
             case .success(let object):
                 completion(.success(object))
@@ -65,12 +56,8 @@ extension APIService {
         guard let url = components.url else {
             return nil
         }
-        
-        guard let token = token else {
-            return Resource(method: .get, url: url)
-        }
 
-        return Resource(method: .get, url: url, headers: ["Bearer token": token])
+        return Resource(method: .get, url: url)
     }
 
     func makeComponents(with path: String) -> URLComponents {
