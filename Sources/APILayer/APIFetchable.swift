@@ -27,5 +27,8 @@ public protocol APIFetchable {
     func removeFavorite(gameId: String, completion: @escaping ErrorCompletion)
     
     func playGame(gameId: String, bet: Bet?, completion: @escaping BetCompletion)
+    
+    // Hope backend will solve this, but for now:
+    func fetchDiceHistory(completion: @escaping BetsHistoryCompletion)
 
 }

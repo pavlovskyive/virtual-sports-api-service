@@ -92,6 +92,16 @@ final public class APIService: APIFetchable {
 
         fetch(from: resource, completion: completion)
     }
+    
+    public func fetchDiceHistory(completion: @escaping BetsHistoryCompletion) {
+        
+        guard let resource = makeDiceHistoryResource() else {
+            completion(.failure(.internalError))
+            return
+        }
+
+        fetch(from: resource, completion: completion)
+    }
 
 }
 
@@ -193,10 +203,25 @@ extension APIService {
         let path = config.gameHistoryPath
         let components = makeComponents(with: path)
 
+        guard var url = components.url else {
+            return nil
+        }
+        
+        url.appendPathComponent(gameId)
+
+        return Resource(method: .get, url: url)
+    }
+    
+    // Temp (on backend not knowing what to do).
+    func makeDiceHistoryResource() -> Resource? {
+        
+        let path = "/User/history"
+        let components = makeComponents(with: path)
+        
         guard let url = components.url else {
             return nil
         }
-
+        
         return Resource(method: .get, url: url)
     }
 
