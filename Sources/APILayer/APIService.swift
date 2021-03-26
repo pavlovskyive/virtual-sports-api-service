@@ -18,13 +18,33 @@ final public class APIService: APIFetchable {
         self.networkProvider = networkProvider
         self.config = config
         
-        networkProvider.setHeader("Mobile", forKey: "X-Platform")
+        networkProvider.setHeader("ios", forKey: "X-Platform")
         networkProvider.setHeader("accept", forKey: "application/json")
     }
 
     public func fetchMain(completion: @escaping MainCompletion) {
 
         guard let resource = makeMainResource() else {
+            completion(.failure(.internalError))
+            return
+        }
+        
+        fetch(from: resource, completion: completion)
+    }
+    
+    public func fetchFavourites(completion: @escaping GamesCompletion) {
+
+        guard let resource = makeFavouritesResource() else {
+            completion(.failure(.internalError))
+            return
+        }
+        
+        fetch(from: resource, completion: completion)
+    }
+    
+    public func fetchRecent(completion: @escaping GamesCompletion) {
+
+        guard let resource = makeRecentResource() else {
             completion(.failure(.internalError))
             return
         }
@@ -51,6 +71,30 @@ extension APIService {
     func makeMainResource() -> Resource? {
 
         let path = config.mainPath
+        let components = makeComponents(with: path)
+
+        guard let url = components.url else {
+            return nil
+        }
+
+        return Resource(method: .get, url: url)
+    }
+    
+    func makeFavouritesResource() -> Resource? {
+
+        let path = config.favouritesPath
+        let components = makeComponents(with: path)
+
+        guard let url = components.url else {
+            return nil
+        }
+
+        return Resource(method: .get, url: url)
+    }
+
+    func makeRecentResource() -> Resource? {
+
+        let path = config.recentPath
         let components = makeComponents(with: path)
 
         guard let url = components.url else {

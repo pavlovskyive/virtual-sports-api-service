@@ -13,7 +13,10 @@ public protocol APIFetchable {
     typealias Completion<T> = (Result<T, APIError>) -> ()
     
     typealias MainCompletion = Completion<MainResponse>
+    typealias GamesCompletion = Completion<[Game]>
     
     func fetchMain(completion: @escaping MainCompletion)
+    func fetchFavourites(completion: @escaping GamesCompletion)
+    func fetchRecent(completion: @escaping GamesCompletion)
 
 }

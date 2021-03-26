@@ -1,9 +1,9 @@
 import XCTest
-@testable import APIService
+@testable import APILayer
 @testable import NetworkService
 
 
-final class APIServiceTests: XCTestCase {
+final class APILayerTests: XCTestCase {
     
     func testExample() {
 
