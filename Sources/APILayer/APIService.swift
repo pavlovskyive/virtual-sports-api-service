@@ -54,7 +54,7 @@ final public class APIService: APIFetchable {
     
     public func addFavorite(gameId: String, completion: @escaping ErrorCompletion) {
         
-        guard let resource = makeAddFavouriteResource(gameId: gameId) else {
+        guard let resource = makeFavouriteChangeResource(gameId: gameId, with: .post) else {
             completion(.internalError)
             return
         }
@@ -64,12 +64,33 @@ final public class APIService: APIFetchable {
 
     public func removeFavorite(gameId: String, completion: @escaping ErrorCompletion) {
 
-        guard let resource = makeRemoveFavouriteResource(gameId: gameId) else {
+        guard let resource = makeFavouriteChangeResource(gameId: gameId, with: .delete) else {
             completion(.internalError)
             return
         }
         
         perform(to: resource, completion: completion)
+    }
+    
+    public func playGame(gameId: String, bet: Bet?, completion: @escaping BetCompletion) {
+
+        guard let bet = bet,
+              let resource = makePlayGameResource(gameId: gameId, bet: bet) else {
+            completion(.failure(.internalError))
+            return
+        }
+
+        fetch(from: resource, completion: completion)
+    }
+    
+    public func fetchGameHistory(for gameId: String, completion: @escaping BetsHistoryCompletion) {
+
+        guard let resource = makeGameHistoryResource(gameId: gameId) else {
+            completion(.failure(.internalError))
+            return
+        }
+
+        fetch(from: resource, completion: completion)
     }
 
 }
@@ -138,7 +159,7 @@ extension APIService {
         return Resource(method: .get, url: url)
     }
     
-    func makeAddFavouriteResource(gameId: String) -> Resource? {
+    func makeFavouriteChangeResource(gameId: String, with method: HTTPMethod) -> Resource? {
 
         let path = config.favouriteGamePath
         let components = makeComponents(with: path)
@@ -149,21 +170,34 @@ extension APIService {
         
         url.appendPathComponent(gameId)
 
-        return Resource(method: .post, url: url)
+        return Resource(method: method, url: url)
     }
     
-    func makeRemoveFavouriteResource(gameId: String) -> Resource? {
-
-        let path = config.favouriteGamePath
+    func makePlayGameResource(gameId: String, bet: Bet) -> Resource? {
+        
+        let path = config.playGamePath
         let components = makeComponents(with: path)
 
-        guard var url = components.url else {
+        guard var url = components.url,
+              let body = try? JSONEncoder().encode(bet) else {
             return nil
         }
         
         url.appendPathComponent(gameId)
 
-        return Resource(method: .delete, url: url)
+        return Resource(method: .post, url: url, body: body)
+    }
+    
+    func makeGameHistoryResource(gameId: String) -> Resource? {
+
+        let path = config.gameHistoryPath
+        let components = makeComponents(with: path)
+
+        guard let url = components.url else {
+            return nil
+        }
+
+        return Resource(method: .get, url: url)
     }
 
     func makeComponents(with path: String) -> URLComponents {
