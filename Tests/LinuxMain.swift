@@ -1,7 +1,7 @@
 import XCTest
 
-import APIServiceTests
+import APILayerTests
 
 var tests = [XCTestCaseEntry]()
-tests += APIServiceTests.allTests()
+tests += APILayerTests.allTests()
 XCTMain(tests)
