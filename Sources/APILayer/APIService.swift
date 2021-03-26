@@ -51,6 +51,27 @@ final public class APIService: APIFetchable {
         
         fetch(from: resource, completion: completion)
     }
+    
+    public func addFavorite(gameId: String, completion: @escaping ErrorCompletion) {
+        
+        guard let resource = makeAddFavouriteResource(gameId: gameId) else {
+            completion(.internalError)
+            return
+        }
+        
+        perform(to: resource, completion: completion)
+    }
+
+    public func removeFavorite(gameId: String, completion: @escaping ErrorCompletion) {
+
+        guard let resource = makeRemoveFavouriteResource(gameId: gameId) else {
+            completion(.internalError)
+            return
+        }
+        
+        perform(to: resource, completion: completion)
+    }
+
 }
 
 extension APIService {
@@ -64,6 +85,19 @@ extension APIService {
                 completion(.success(object))
             case .failure(let error):
                 completion(.failure(.networkError(error)))
+            }
+        }
+    }
+
+    func perform(to resource: Resource,
+               completion: @escaping ErrorCompletion) {
+
+        networkProvider.performRequest(for: resource) { result in
+            switch result {
+            case .success(_):
+                completion(nil)
+            case .failure(let error):
+                completion(.networkError(error))
             }
         }
     }
@@ -102,6 +136,34 @@ extension APIService {
         }
 
         return Resource(method: .get, url: url)
+    }
+    
+    func makeAddFavouriteResource(gameId: String) -> Resource? {
+
+        let path = config.favouriteGamePath
+        let components = makeComponents(with: path)
+
+        guard var url = components.url else {
+            return nil
+        }
+        
+        url.appendPathComponent(gameId)
+
+        return Resource(method: .post, url: url)
+    }
+    
+    func makeRemoveFavouriteResource(gameId: String) -> Resource? {
+
+        let path = config.favouriteGamePath
+        let components = makeComponents(with: path)
+
+        guard var url = components.url else {
+            return nil
+        }
+        
+        url.appendPathComponent(gameId)
+
+        return Resource(method: .delete, url: url)
     }
 
     func makeComponents(with path: String) -> URLComponents {
