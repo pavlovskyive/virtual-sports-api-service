@@ -185,6 +185,10 @@ extension APIService {
     
     func makePlayGameResource(gameId: String, bet: Bet) -> Resource? {
         
+        let headers = [
+            "Content-Type": "application/json"
+        ]
+        
         let path = config.playGamePath
         let components = makeComponents(with: path)
 
@@ -195,7 +199,7 @@ extension APIService {
         
         url.appendPathComponent(gameId)
 
-        return Resource(method: .post, url: url, body: body)
+        return Resource(method: .post, url: url, body: body, headers: headers)
     }
     
     func makeGameHistoryResource(gameId: String) -> Resource? {
