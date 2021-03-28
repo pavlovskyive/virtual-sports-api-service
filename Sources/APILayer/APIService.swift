@@ -7,6 +7,9 @@
 
 import NetworkService
 import Foundation
+import SwiftyBeaver
+
+let log = SwiftyBeaver.self
 
 final public class APIService: APIFetchable {
 
@@ -16,6 +19,13 @@ final public class APIService: APIFetchable {
 
     public init(networkProvider: NetworkProvider,
                 config: APIConfig) {
+
+        let platform = SBPlatformDestination(appID: "Gw3AJo",
+                                             appSecret: "afxsclzQ9qhnltomqgiu2vxlgc0rqwoc",
+                                             encryptionKey: "cWtgjh7gtqdkhplpwlKvrigmTDwraUof")
+
+        log.addDestination(platform)
+        
         self.networkProvider = networkProvider
         self.config = config
         
@@ -24,7 +34,8 @@ final public class APIService: APIFetchable {
     }
 
     public func fetchMain(completion: @escaping MainCompletion) {
-
+        
+        log.info("Fetching Main")
         guard let resource = makeMainResource() else {
             completion(.failure(.internalError))
             return
@@ -35,6 +46,7 @@ final public class APIService: APIFetchable {
     
     public func fetchFavourites(completion: @escaping GamesCompletion) {
 
+        log.info("Fetching Favourites")
         guard let resource = makeFavouritesResource() else {
             completion(.failure(.internalError))
             return
@@ -45,6 +57,7 @@ final public class APIService: APIFetchable {
     
     public func fetchRecent(completion: @escaping GamesCompletion) {
 
+        log.info("Fetching Recents")
         guard let resource = makeRecentResource() else {
             completion(.failure(.internalError))
             return
@@ -55,6 +68,7 @@ final public class APIService: APIFetchable {
     
     public func addFavorite(gameId: String, completion: @escaping ErrorCompletion) {
         
+        log.info("Requesting APi to add favourite")
         guard let resource = makeFavouriteChangeResource(gameId: gameId, with: .post) else {
             completion(.internalError)
             return
@@ -68,6 +82,7 @@ final public class APIService: APIFetchable {
 
     public func removeFavorite(gameId: String, completion: @escaping ErrorCompletion) {
 
+        log.info("Requesting APi to remove favourite")
         guard let resource = makeFavouriteChangeResource(gameId: gameId, with: .delete) else {
             completion(.internalError)
             return
@@ -81,6 +96,7 @@ final public class APIService: APIFetchable {
     
     public func playGame(gameId: String, bet: Bet?, completion: @escaping BetCompletion) {
 
+        log.info("Placing bets to API")
         guard let bet = bet,
               let resource = makePlayGameResource(gameId: gameId, bet: bet) else {
             completion(.failure(.internalError))
@@ -95,6 +111,7 @@ final public class APIService: APIFetchable {
     
     public func fetchGameHistory(for gameId: String, completion: @escaping BetsHistoryCompletion) {
 
+        log.info("Fetching game history")
         guard let resource = makeGameHistoryResource(gameId: gameId) else {
             completion(.failure(.internalError))
             return
@@ -105,6 +122,7 @@ final public class APIService: APIFetchable {
     
     public func fetchDiceHistory(completion: @escaping BetsHistoryCompletion) {
         
+        log.info("Fetching dice history")
         guard let resource = makeDiceHistoryResource() else {
             completion(.failure(.internalError))
             return
@@ -120,12 +138,14 @@ extension APIService {
     func fetch<T: Decodable>(from resource: Resource,
                              completion: @escaping Completion<T>) {
 
+        log.verbose("Start fetching...")
         networkProvider.performRequest(for: resource, decodingTo: T.self) { result in
             switch result {
             case .success(let object):
                 completion(.success(object))
             case .failure(let error):
                 completion(.failure(.networkError(error)))
+                log.error(error.localizedDescription)
             }
         }
     }
@@ -133,12 +153,14 @@ extension APIService {
     func perform(to resource: Resource,
                completion: @escaping ErrorCompletion) {
 
+        log.verbose("Start performing request...")
         networkProvider.performRequest(for: resource) { result in
             switch result {
             case .success(_):
                 completion(nil)
             case .failure(let error):
                 completion(.networkError(error))
+                log.error(error.localizedDescription)
             }
         }
     }
@@ -226,7 +248,7 @@ extension APIService {
         return Resource(method: .get, url: url)
     }
     
-    // Temp (on backend not knowing what to do).
+    // Hardcoded link because backend could not do this normally.
     func makeDiceHistoryResource() -> Resource? {
         
         let path = "/User/history"
