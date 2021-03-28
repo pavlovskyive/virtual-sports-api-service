@@ -12,6 +12,7 @@ final public class APIService: APIFetchable {
 
     var networkProvider: NetworkProvider
     var config: APIConfig
+    weak public var delegate: APIDelegate?
 
     public init(networkProvider: NetworkProvider,
                 config: APIConfig) {
@@ -59,7 +60,10 @@ final public class APIService: APIFetchable {
             return
         }
         
-        perform(to: resource, completion: completion)
+        perform(to: resource) { [weak self] error in
+            completion(error)
+            self?.delegate?.onFavouritesChanged()
+        }
     }
 
     public func removeFavorite(gameId: String, completion: @escaping ErrorCompletion) {
@@ -69,7 +73,10 @@ final public class APIService: APIFetchable {
             return
         }
         
-        perform(to: resource, completion: completion)
+        perform(to: resource) { [weak self] value in
+            completion(value)
+            self?.delegate?.onFavouritesChanged()
+        }
     }
     
     public func playGame(gameId: String, bet: Bet?, completion: @escaping BetCompletion) {
@@ -80,7 +87,10 @@ final public class APIService: APIFetchable {
             return
         }
 
-        fetch(from: resource, completion: completion)
+        fetch(from: resource) { [weak self] (result: Result<Bet, APIError>) in
+            completion(result)
+            self?.delegate?.onRecentsChanged()
+        }
     }
     
     public func fetchGameHistory(for gameId: String, completion: @escaping BetsHistoryCompletion) {
