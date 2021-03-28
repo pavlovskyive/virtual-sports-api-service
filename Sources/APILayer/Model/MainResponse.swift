@@ -101,10 +101,12 @@ public struct Game: Codable {
     public let categories: [String]
     public let name: String
     public let tags: [String]
+    public let imageURL: String
     
     enum CodingKeys: String, CodingKey {
         case id, provider, categories
         case name = "displayName"
+        case imageURL = "image"
         case tags
     }
 
@@ -112,13 +114,15 @@ public struct Game: Codable {
                 provider: String,
                 categories: [String],
                 name: String,
-                tags: [String]) {
+                tags: [String],
+                imageURL: String) {
 
         self.id = id
         self.provider = provider
         self.categories = categories
         self.name = name
         self.tags = tags
+        self.imageURL = imageURL
     }
     
 }
