@@ -102,12 +102,13 @@ public struct Game: Codable {
     public let name: String
     public let tags: [String]
     public let imageURL: String
+    public let url: String
     
     enum CodingKeys: String, CodingKey {
         case id, provider, categories
         case name = "displayName"
         case imageURL = "image"
-        case tags
+        case tags, url
     }
 
     public init(id: String,
@@ -115,7 +116,8 @@ public struct Game: Codable {
                 categories: [String],
                 name: String,
                 tags: [String],
-                imageURL: String) {
+                imageURL: String,
+                url: String) {
 
         self.id = id
         self.provider = provider
@@ -123,6 +125,7 @@ public struct Game: Codable {
         self.name = name
         self.tags = tags
         self.imageURL = imageURL
+        self.url = url
     }
     
 }

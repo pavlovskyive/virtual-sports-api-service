@@ -18,6 +18,7 @@ public struct APIConfig {
     var recentPath: String
     var playGamePath: String
     var gameHistoryPath: String
+    var recommendedPath: String
     
     public init(scheme: String,
                 host: String,
@@ -26,7 +27,8 @@ public struct APIConfig {
                 favouriteGamePath: String,
                 recentPath: String,
                 playGamePath: String,
-                gameHistoryPath: String) {
+                gameHistoryPath: String,
+                recommendedPath: String) {
         
         self.scheme = scheme
         self.host = host
@@ -36,6 +38,7 @@ public struct APIConfig {
         self.recentPath = recentPath
         self.playGamePath = playGamePath
         self.gameHistoryPath = gameHistoryPath
+        self.recommendedPath = recommendedPath
     }
     
 }

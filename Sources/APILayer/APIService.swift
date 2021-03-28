@@ -36,7 +36,7 @@ final public class APIService: APIFetchable {
     public func fetchMain(completion: @escaping MainCompletion) {
         
         log.info("Fetching Main")
-        guard let resource = makeMainResource() else {
+        guard let resource = makeGamesResource(path: config.mainPath) else {
             completion(.failure(.internalError))
             return
         }
@@ -47,7 +47,7 @@ final public class APIService: APIFetchable {
     public func fetchFavourites(completion: @escaping GamesCompletion) {
 
         log.info("Fetching Favourites")
-        guard let resource = makeFavouritesResource() else {
+        guard let resource = makeGamesResource(path: config.favouritesPath) else {
             completion(.failure(.internalError))
             return
         }
@@ -58,7 +58,18 @@ final public class APIService: APIFetchable {
     public func fetchRecent(completion: @escaping GamesCompletion) {
 
         log.info("Fetching Recents")
-        guard let resource = makeRecentResource() else {
+        guard let resource = makeGamesResource(path: config.recentPath) else {
+            completion(.failure(.internalError))
+            return
+        }
+        
+        fetch(from: resource, completion: completion)
+    }
+    
+    public func fetchRecommended(completion: @escaping GamesCompletion) {
+        
+        log.info("Fetching Recommended")
+        guard let resource = makeGamesResource(path: config.mainPath) else {
             completion(.failure(.internalError))
             return
         }
@@ -164,34 +175,9 @@ extension APIService {
             }
         }
     }
-
-    func makeMainResource() -> Resource? {
-
-        let path = config.mainPath
-        let components = makeComponents(with: path)
-
-        guard let url = components.url else {
-            return nil
-        }
-
-        return Resource(method: .get, url: url)
-    }
     
-    func makeFavouritesResource() -> Resource? {
-
-        let path = config.favouritesPath
-        let components = makeComponents(with: path)
-
-        guard let url = components.url else {
-            return nil
-        }
-
-        return Resource(method: .get, url: url)
-    }
-
-    func makeRecentResource() -> Resource? {
-
-        let path = config.recentPath
+    func makeGamesResource(path: String) -> Resource? {
+        
         let components = makeComponents(with: path)
 
         guard let url = components.url else {
