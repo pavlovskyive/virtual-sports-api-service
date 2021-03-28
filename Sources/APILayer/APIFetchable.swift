@@ -8,7 +8,7 @@
 import Foundation
 import NetworkService
 
-public protocol APIFetchable {
+public protocol APIFetchable: class {
 
     typealias Completion<T> = (Result<T, APIError>) -> Void
     typealias ErrorCompletion = (APIError?) -> Void
@@ -17,6 +17,8 @@ public protocol APIFetchable {
     typealias GamesCompletion = Completion<[Game]>
     typealias BetCompletion = Completion<Bet>
     typealias BetsHistoryCompletion = Completion<[Bet]>
+    
+    var delegate: APIDelegate? { get set }
     
     func fetchMain(completion: @escaping MainCompletion)
     func fetchFavourites(completion: @escaping GamesCompletion)
