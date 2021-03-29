@@ -123,7 +123,7 @@ final public class APIService: APIFetchable {
     public func playMockedGame(gameId: String) {
         
         log.info("Sending GET(wtf why) request to play game")
-        guard let resource = makeGameHistoryResource(gameId: gameId) else {
+        guard let resource = makeMockedPlayGameResource(gameId: gameId) else {
             return
         }
 
@@ -238,6 +238,8 @@ extension APIService {
         guard var url = components.url else {
             return nil
         }
+        
+        url.appendPathComponent(gameId)
 
         return Resource(method: .get, url: url)
     }
