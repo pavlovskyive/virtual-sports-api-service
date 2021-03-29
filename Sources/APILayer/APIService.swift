@@ -127,7 +127,9 @@ final public class APIService: APIFetchable {
             return
         }
 
-        perform(to: resource) {_ in}
+        perform(to: resource) { [weak self]_ in
+            self?.delegate?.onRecentsChanged()
+        }
     }
     
     public func fetchGameHistory(for gameId: String, completion: @escaping BetsHistoryCompletion) {
