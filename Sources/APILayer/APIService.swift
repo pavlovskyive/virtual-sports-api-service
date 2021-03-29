@@ -120,6 +120,16 @@ final public class APIService: APIFetchable {
         }
     }
     
+    public func playMockedGame(gameId: String) {
+        
+        log.info("Sending GET(wtf why) request to play game")
+        guard let resource = makeGameHistoryResource(gameId: gameId) else {
+            return
+        }
+
+        perform(to: resource) {_ in}
+    }
+    
     public func fetchGameHistory(for gameId: String, completion: @escaping BetsHistoryCompletion) {
 
         log.info("Fetching game history")
@@ -218,6 +228,18 @@ extension APIService {
         url.appendPathComponent(gameId)
 
         return Resource(method: .post, url: url, body: body, headers: headers)
+    }
+    
+    func makeMockedPlayGameResource(gameId: String) -> Resource? {
+        
+        let path = config.playGamePath
+        let components = makeComponents(with: path)
+        
+        guard var url = components.url else {
+            return nil
+        }
+
+        return Resource(method: .get, url: url)
     }
     
     func makeGameHistoryResource(gameId: String) -> Resource? {
